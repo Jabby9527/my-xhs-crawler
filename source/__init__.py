@@ -18,7 +18,6 @@ from .Download import Download
 from .Explore import Explore
 from .Html import Html
 from .Image import Image
-from .Settings import Batch
 from .Settings import Settings
 from .Video import Video
 
@@ -115,14 +114,12 @@ class XHSDownloader(App):
         ("d", "toggle_dark", "切换主题"),
     ]
     APP = XHS(**Settings().run())
-    Batch = Batch()
 
     def compose(self) -> ComposeResult:
         yield Header()
-        yield ScrollableContainer(Label("请输入小红书图文/视频作品链接："),
+        yield ScrollableContainer(Label("请输入小红书图文/视频作品链接（多个链接使用空格分隔）："),
                                   Input(placeholder="URL"),
-                                  HorizontalScroll(Button("下载无水印图片/视频", id="solo"),
-                                                   Button("读取 xhs.txt 文件并批量下载作品", id="batch"),
+                                  HorizontalScroll(Button("下载无水印图片/视频", id="deal"),
                                                    Button("读取剪贴板", id="paste"),
                                                    Button("清空输入框", id="reset"), ))
         yield Log(auto_scroll=True)
@@ -132,26 +129,19 @@ class XHSDownloader(App):
         self.title = f"小红书作品采集工具 V{self.VERSION}{" Beta" if self.Beta else ""}"
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
-        if event.button.id == "solo":
-            self.solo()
-        elif event.button.id == "batch":
-            self.batch()
+        if event.button.id == "deal":
+            self.deal()
         elif event.button.id == "reset":
             self.query_one(Input).value = ""
         elif event.button.id == "paste":
             self.query_one(Input).value = paste()
 
-    def solo(self):
+    def deal(self):
         url = self.query_one(Input).value
         log = self.query_one(Log)
-        log.write_line(f"当前作品链接: {url}")
-        self.APP.extract(url, True, log)
-
-    def batch(self):
-        urls = self.Batch.read_txt()
-        log = self.query_one(Log)
-        if not urls:
-            log.write_line("未检测到 xhs.txt 文件 或者 该文件为空！")
-        for url in urls:
+        if not url:
+            log.write_line("未输入任何作品链接！")
+        else:
             log.write_line(f"当前作品链接: {url}")
             self.APP.extract(url, True, log)
+            self.query_one(Input).value = ""
