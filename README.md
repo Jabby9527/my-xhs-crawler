@@ -37,9 +37,11 @@
 <p>如果想要获取小红书图文/视频作品信息，可以根据 <code>main.py</code> 的注释提示进行代码调用。</p>
 <pre>
 # 测试链接
-error_demo = "https://github.com/JoeanAmier/XHS-Downloader"
+error_demo = "https://github.com/JoeanAmier/XHS_Downloader"
 image_demo = "https://www.xiaohongshu.com/explore/63b275a30000000019020185"
 video_demo = "https://www.xiaohongshu.com/explore/64edb460000000001f03cadc"
+multiple_demo = ("https://www.xiaohongshu.com/explore/63b275a30000000019020185 "
+                 "https://www.xiaohongshu.com/explore/64edb460000000001f03cadc")
 # 实例对象
 path = ""  # 作品下载储存根路径，默认值：当前路径
 folder = "Download"  # 作品下载文件夹名称（自动创建），默认值：Download
@@ -55,14 +57,13 @@ xhs = XHS(
     timeout=timeout,
     chunk=chunk, )  # 使用自定义参数
 # xhs = XHS()  # 使用默认参数
-download = True  # 是否下载作品文件
+download = False  # 是否下载作品文件
 # 返回作品详细信息，包括下载地址
 print(xhs.extract(error_demo))  # 获取数据失败时返回空字典
 print(xhs.extract(image_demo, download=download))
 print(xhs.extract(video_demo, download=download))
+print(xhs.extract(multiple_demo, download=download))
 </pre>
-<h1>⛓ 批量下载</h1>
-<p>在程序所在文件夹创建一个 <code>xhs.txt</code> 文本文件，然后将待处理的作品链接输入文件，每行输入一个作品链接，编辑完成后保存文件，然后运行程序，点击 <code>读取 xhs.txt 文件并批量下载作品</code> 按钮，程序会批量下载每个链接对应的作品文件。</p>
 <h1>⚙️ 配置文件</h1>
 <p>根目录下的 <code>settings.json</code> 文件，可以自定义部分运行参数。</p>
 <table>
@@ -109,7 +110,7 @@ print(xhs.extract(video_demo, download=download))
 <td align="center">chunk</td>
 <td align="center">int</td>
 <td align="center">下载文件时，每次从服务器获取的数据块大小，单位：字节</td>
-<td align="center">262144(256KB)</td>
+<td align="center">1048576(1 MB)</td>
 </tr>
 </tbody>
 </table>
@@ -127,7 +128,7 @@ print(xhs.extract(video_demo, download=download))
 <p>如果 <b>XHS-Downloader</b> 对您有帮助，请考虑为它点个 <b>Star</b> ⭐，感谢您的支持！</p>
 <h1>✉️ 联系作者</h1>
 <ul>
-<li>QQ: 2437596031</li>
+<li>QQ: 2437596031（联系请说明来意）</li>
 <li>QQ Group: <a href="https://github.com/JoeanAmier/XHS-Downloader/blob/master/static/QQ%E7%BE%A4%E8%81%8A%E4%BA%8C%E7%BB%B4%E7%A0%81.png">点击扫码加入群聊</a></li>
 <li>Email: yonglelolu@gmail.com</li>
 </ul>

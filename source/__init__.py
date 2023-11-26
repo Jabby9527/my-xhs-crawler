@@ -45,7 +45,7 @@ class XHS:
             cookie=None,
             proxies=None,
             timeout=10,
-            chunk=256 * 1024,
+            chunk=1024 * 1024,
     ):
         self.__update_cookie(cookie)
         self.html = Html(self.headers, proxies, timeout)
@@ -72,7 +72,9 @@ class XHS:
             self.download.run(url, self.__naming_rules(container), 0, log)
         container["下载地址"] = url
 
-    def extract(self, url: str, download=False, log=None) -> dict:
+    def extract(self, url: str, download=False, log=None) -> dict | list[dict]:
+        if len(u := url.split()) > 1:
+            return [self.extract(i) for i in u]
         if not self.__check(url):
             print(f"无效的作品链接: {url}")
             return {}
@@ -105,7 +107,8 @@ class XHS:
 class XHSDownloader(App):
     VERSION = 1.6
     Beta = True
-    CSS_PATH = Path(__file__).resolve().parent.parent.joinpath(
+    ROOT = Path(__file__).resolve().parent.parent
+    CSS_PATH = ROOT.joinpath(
         "static/XHS-Downloader.tcss")
     BINDINGS = [
         Binding(key="q", action="quit", description="退出程序"),
